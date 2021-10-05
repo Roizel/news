@@ -1,9 +1,10 @@
-import React, {useRef} from 'react'
+import React, {useRef} from 'react' /*userRef. штука, тіпа як хук, сюди ми передаємо данні*/
 import validatonFields from './Validation';
-import {Formik, Form} from 'formik';
+import {Formik, Form} from 'formik'; /*Formik, Крута штука, тіпа як дів тількі с світі react, круто структурує код*/
 import MyTextInput from "../../common/MyTextInput";
 import MyPhotoInput from '../../common/MyPhotoInput';
 
+/*Formik - бібліотека, яка дозволяє повторно використовувати форми + має свої гібкі налаштування*/
 
 const RegisterPage=() => {
 
@@ -42,11 +43,11 @@ const RegisterPage=() => {
         <div className="row">
             <h1 className="text-center">Реєстрація</h1>
             <div className="offset-md-3 col-md-6">
-            <Formik 
-                innerRef={formikRef}
-                initialValues = {initState} 
-                onSubmit={onSubmitHandler}
-                validationSchema= {validatonFields()}>
+            <Formik /*Використання форміку*/
+                innerRef={formikRef} /*Получаєм силку*/
+                initialValues = {initState} /*Тут ми кажем, що const initState буде нашим стейтом(Класа ж немає)*/ 
+                onSubmit={onSubmitHandler} /*На підтвердження вішаєм нашу функцію*/
+                validationSchema= {validatonFields()  /*Кажем, що валідувати данні буде наш валідатор*/}>
                 <Form>
 
                     {/* присвоюєм значення в наш текстовий інпут /common/MyTextInput */}
@@ -90,13 +91,12 @@ const RegisterPage=() => {
                         placeH = "Повторіть пароль"
                     />
 
-
                     {/* /common/MyPhotoInput */}
-                    <MyPhotoInput
+                    <MyPhotoInput /*Інша функція яка обробляє нашу фотку*/
                         name = "Photo"
                         type = "file"
                         id = "Photo"
-                        formikRef={formikRef}
+                        formikRef={formikRef} /*Передаєм нашу силку в функцію, яка приймає цей formikRef*/
                     />
 
 

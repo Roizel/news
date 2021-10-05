@@ -31,7 +31,7 @@ const InputTextField = ({
 };
 
 InputTextField.propTypes = { 
-    field: PropTypes.string.isRequired, // встановили типи даних і зробили поля обовязковими
+    field: PropTypes.string.isRequired, // встановили типи даних і зробили поля обов'язковими
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     error: PropTypes.string,            // ці ні
@@ -41,7 +41,7 @@ InputTextField.propTypes = {
   };
 
   InputTextField.defaultProps = {
-    type: "text",               // тут встановили значення по замовчувані
+    type: "text",               // тут встановили значення по замовчуванню
     placeholder: "Введіть дані"
   };
 

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const validationFields= () => {
+const validationFields= () => { /*Все те саме що і у реєстрації*/
     return Yup.object({
         Email: Yup.string()
             .email('Не коректно вказана пошта')

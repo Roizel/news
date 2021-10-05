@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const validationFields= () => {
+const validationFields= () => { /*Валідуємо данні за допомгою бібліотекі Yup*/
 
     return Yup.object({
         // валідація пошти

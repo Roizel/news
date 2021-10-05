@@ -1,9 +1,11 @@
 import React from 'react'
 import validatonFields from './Validation';
-import {Formik, Form} from 'formik';
+import {Formik, Form} from 'formik'; /*Те саме що і у реєстрації*/
 import MyTextInput from "../../common/MyTextInput";
 
-const LoginPage=()=>{
+/*Все коментарі були описані у RegistrationPage*/
+
+const LoginPage=()=>{ /*Тут буде наш стейт*/
 
     const initState = {
         Email: '',
@@ -20,7 +22,7 @@ const LoginPage=()=>{
         <div className="row">
             <h1 className="text-center">Вхід</h1>
             <div className="offset-md-3 col-md-6">
-            <Formik 
+            <Formik /*Все те саме що і у реєстрації*/
                 initialValues = {initState} 
                 onSubmit={onSubmitHandler}
                 validationSchema= {validatonFields()}>
