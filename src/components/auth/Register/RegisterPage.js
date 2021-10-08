@@ -25,16 +25,18 @@ const RegisterPage=() => {
     //функція яка викликається під час події он сабміт (умовно відправляє дані на сервер)
     const onSubmitHandler=(values) =>
     {
-        console.log("Server submit data", values);
-        console.log("Server submit file", JSON.stringify(
+        let info = JSON.stringify(
             { 
-              fileName: values.photo.name, 
-              type: values.photo.type,
-              size: `${values.photo.size} bytes`
+              fileName: values.Photo.name, 
+              type: values.Photo.type,
+              size: `${values.Photo.size} bytes`
             },
             null,
             2
-          ));
+          );
+        console.log("Server submit data", values);
+        console.log("Server submit file", (info));
+        alert(info);
     }
 
 
