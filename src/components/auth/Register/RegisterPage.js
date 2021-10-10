@@ -3,6 +3,7 @@ import validatonFields from './Validation';
 import {Formik, Form} from 'formik'; /*Formik, Крута штука, тіпа як дів тількі с світі react, круто структурує код*/
 import MyTextInput from "../../common/MyTextInput";
 import MyPhotoInput from '../../common/MyPhotoInput';
+import http from "../../../http_common";
 
 /*Formik - бібліотека, яка дозволяє повторно використовувати форми + має свої гібкі налаштування*/
 
@@ -25,18 +26,31 @@ const RegisterPage=() => {
     //функція яка викликається під час події он сабміт (умовно відправляє дані на сервер)
     const onSubmitHandler=(values) =>
     {
-        let info = JSON.stringify(
-            { 
-              fileName: values.Photo.name, 
-              type: values.Photo.type,
-              size: `${values.Photo.size} bytes`
-            },
-            null,
-            2
-          );
-        console.log("Server submit data", values);
-        console.log("Server submit file", (info));
-        alert(info);
+        const formData = new FormData(); /*Create form, which can send some files and data*/
+        /*In foreach we read all from initState and write it into form(For example: key - email
+            value - value of email(loh@gmail.com))*/
+        Object.entries(values).forEach(([key,value]) => formData.append(key,value));
+
+        http.post("api/account/register", formData, /*Send our form into server(on ASP)*/
+          {
+              headers:{
+              'Content-Type': 'multipart/form-data'
+          }
+    });
+
+
+        // let info = JSON.stringify(
+        //     { 
+        //       fileName: values.Photo.name, 
+        //       type: values.Photo.type,
+        //       size: `${values.Photo.size} bytes`
+        //     },
+        //     null,
+        //     2
+        //   );
+        // console.log("Server submit data", values);
+        // console.log("Server submit file", (info));
+        // alert(info);
     }
 
 

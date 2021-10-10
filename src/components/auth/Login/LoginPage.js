@@ -48,7 +48,6 @@ const LoginPage=()=>{ /*Тут буде наш стейт*/
             </Formik>
             </div>
         </div>
-
     )
 
 

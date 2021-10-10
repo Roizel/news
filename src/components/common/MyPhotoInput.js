@@ -6,8 +6,7 @@ const MyPhotoInput = ({ formikRef, ...props }) => { /*Приймаємо сил�
 
     // фото яке показується по замовчувані
     const [Photo, setPhoto] = useState("https://bytes.ua/wp-content/uploads/2017/08/no-image.png");
-
-
+    const [error, serError] = useState("");
     const [field, meta] = useField(props); /*Присвоюємо в філди і мету пропси*/
 
     // функція яка викликається при події он чандж на інпуті
@@ -34,7 +33,7 @@ const MyPhotoInput = ({ formikRef, ...props }) => { /*Приймаємо сил�
                 onChange={selectImage} /*Вішаємо функцію на чендж*/
             />
 
-            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
+            {meta.error && <span className="text-danger">{meta.error}</span>}
         </div>
     );
 };
