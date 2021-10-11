@@ -1,20 +1,34 @@
 import { useState } from "react";
 import { useField } from 'formik';
 
-const MyPhotoInput = ({ formikRef, ...props }) => { /*Приймаємо силку на формік і приймаємо всякі данні(в нашому випадку фото)*/
+const MyPhotoInput = ({ myField, formikRef, ...props }) => { /*Приймаємо силку на формік і приймаємо всякі данні(в нашому випадку фото)*/
 
 
     // фото яке показується по замовчувані
     const [Photo, setPhoto] = useState("https://bytes.ua/wp-content/uploads/2017/08/no-image.png");
-    const [error, serError] = useState("");
+    const [error, setError] = useState("");
     const [field, meta] = useField(props); /*Присвоюємо в філди і мету пропси*/
 
     // функція яка викликається при події он чандж на інпуті
     const selectImage = (event) => {
-        const FILE_OBJECT = event.currentTarget.files[0]; /*Присвоюємо фотку в змінну*/
-        setPhoto(URL.createObjectURL(FILE_OBJECT)); /*НУ типу встановлюєм фото, але я не бачу що це таке setPhoto*/
-        
-        formikRef.current.setFieldValue(props.id, FILE_OBJECT);
+        const files= event.currentTarget.files; /*ЗАписуєм у files фотку*/
+        if (!(files && files[0])) { /*Перевірка на наявність фото*/
+            setError("Оберіть файл.");
+            return;
+        }
+
+        if (!files[0].type.match(/^image\//)) {
+            setError("Оберіть фото."); /*Перевірка на тип фото*/
+            return;
+        }
+
+        if (((files[0].size / 1024) / 1024) >10) {
+            setError("Файл не може бути більше 10 Мб."); /*Перевірка на розмір фото(макс 10 мб)*/
+            return;
+        }
+        setPhoto(URL.createObjectURL(files[0])); /*Якщо все ок, то создаємо об'єкт*/
+        formikRef.current.setFieldValue(myField, files[0]); /*Вставляєм в наш формік фото*/
+        setError("");
     }
 
     return ( /*Вертаємо img і фоткі*/
@@ -29,11 +43,12 @@ const MyPhotoInput = ({ formikRef, ...props }) => { /*Приймаємо сил�
             <input type="file"
                 style={{ display: "none" }}
                 className="form-control"
-                id={props.id}
+                id={myField}
                 onChange={selectImage} /*Вішаємо функцію на чендж*/
             />
+            {error && <span className="text-danger">{error}</span>}
 
-            {meta.error && <span className="text-danger">{meta.error}</span>}
+            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
         </div>
     );
 };
