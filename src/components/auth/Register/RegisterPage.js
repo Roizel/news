@@ -16,6 +16,7 @@ const RegisterPage=() => {
         Login: '',
         Password: '',
         ConfirmPassword: '',
+        FIO: '',
         Photo: null,
     };
 
@@ -65,6 +66,13 @@ const RegisterPage=() => {
                         type = "Number"
                         id= "Phone"
                         placeH = "+38(000)000-00-00"
+                    />
+                      <MyTextInput
+                        label = "FIO"
+                        name = "FIO"
+                        type = "text"
+                        id= "FIO"
+                        placeH = "Write FIO"
                     />
 
                     <MyTextInput
