@@ -31,13 +31,28 @@ const RegisterPage=() => {
         /*In foreach we read all from initState and write it into form(For example: key - email
             value - value of email(loh@gmail.com))*/
         Object.entries(values).forEach(([key,value]) => formData.append(key,value));
+        console.log("Нажалось")
 
-        http.post("api/account/register", formData, /*Send our form into server(on ASP)*/
-          {
-              headers:{
-              'Content-Type': 'multipart/form-data'
-          }
-    });
+        http.post("api/account/register", formData,
+        {
+            headers:{
+                'Content-Type' : 'multipart/form-data'
+            }
+        
+        }).then(good => {
+            console.log("Good result", good);
+
+        }, badResult => {
+            const {errors} = badResult.response.data;
+            if(errors.Email) {
+                let tmp="";
+                errors.Email.forEach(message => {
+                    tmp += message + " ";
+                    console.log("Error from RegisterPage: Email", tmp);
+                    formikRef.current.setFieldError("Email" ,message);
+                });
+            }
+        });
     }
     //ретурнимо нашу сторінку типу замість рендеру
     return (
