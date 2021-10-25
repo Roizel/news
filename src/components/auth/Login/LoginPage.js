@@ -8,8 +8,8 @@ import MyTextInput from "../../common/MyTextInput";
 const LoginPage=()=>{ /*Тут буде наш стейт*/
 
     const initState = {
-        Email: '',
-        Password: '',
+        email: '',
+        password: '',
     };
 
     const onSubmitHandler=(values) =>
@@ -30,16 +30,16 @@ const LoginPage=()=>{ /*Тут буде наш стейт*/
 
                     <MyTextInput
                         label = "Електрона пошта"
-                        name = "Email"
+                        name = "email"
                         type = "Email"
-                        id= "Email"
+                        id= "email"
                     />
 
                     <MyTextInput
                         label = "Пароль"
-                        name = "Password"
+                        name = "password"
                         type = "password"
-                        id= "Password"
+                        id= "password"
                     />
 
 

@@ -1,9 +1,10 @@
-import React, {useRef} from 'react' /*userRef. штука, тіпа як хук, сюди ми передаємо данні*/
+import React, {useRef, useState} from 'react' /*userRef. штука, тіпа як хук, сюди ми передаємо данні*/
 import validatonFields from './Validation';
 import {Formik, Form} from 'formik'; /*Formik, Крута штука, тіпа як дів тількі с світі react, круто структурує код*/
 import MyTextInput from "../../common/MyTextInput";
 import MyPhotoInput from '../../common/MyPhotoInput';
-import http from "../../../http_common";
+import http from "../../../http_common"; /*Settings to Server*/
+import { useHistory } from 'react-router'; /*For Redirecting*/
 
 /*Formik - бібліотека, яка дозволяє повторно використовувати форми + має свої гібкі налаштування*/
 
@@ -11,19 +12,20 @@ const RegisterPage=() => {
 
     //це типу наш стейт
     const initState = {
-        Email: '',
-        Phone: '',
-        Login: '',
-        Password: '',
-        ConfirmPassword: '',
-        FIO: '',
-        Photo: null,
+        email: '',
+        phone: '',
+        login: '',
+        password: '',
+        confirmPassword: '',
+        fio: '',
+        photo: null,
     };
 
     //силка на наш формік
-    const formikRef = useRef();
-
-
+    const formikRef = useRef(); /*Ref for formik*/
+    const titleRef = useRef(); /*Ref for errors title(IF ERRORS ONLY FROM SERVER)*/
+    const[invalid, setInvalid] = useState([]); /*Ref for Errors from server*/
+    const history = useHistory();
     //функція яка викликається під час події он сабміт (умовно відправляє дані на сервер)
     const onSubmitHandler=(values) =>
     {
@@ -33,31 +35,49 @@ const RegisterPage=() => {
         Object.entries(values).forEach(([key,value]) => formData.append(key,value));
         console.log("Нажалось")
 
-        http.post("api/account/register", formData,
+        http.post("api/account/register", formData, /*Send data to server*/
         {
             headers:{
                 'Content-Type' : 'multipart/form-data'
             }
         
-        }).then(good => {
+        }).then(good => { /*if answer good*/
+            history.push('/'); /*Redirect  to MainPage*/
             console.log("Good result", good);
 
-        }, badResult => {
-            const {errors} = badResult.response.data;
-            if(errors.Email) {
-                let tmp="";
-                errors.Email.forEach(message => {
-                    tmp += message + " ";
-                    console.log("Error from RegisterPage: Email", tmp);
-                    formikRef.current.setFieldError("Email" ,message);
-                });
-            }
+        }, badResult => { /*If answer bad*/
+            const errors = badResult.response.data.errors; /*Write errors to variable*/
+            console.log(badResult.response.data.errors);
+
+            Object.entries(errors).forEach(([key, values]) => { /*Create from object massive with key and value(Dictionary from c#) and go with ForEach*/
+                let message = '';
+                values.forEach(text => message += text + " ");
+                formikRef.current.setFieldError(key,message); /*Set error to formik*/
+            });
+            setInvalid(errors.invalid);
+            titleRef.current.scrollIntoView({behavior: 'smooth'}) /*scroll up if exists errors(IF ERRORS ONLY FROM SERVER)*/
         });
     }
     //ретурнимо нашу сторінку типу замість рендеру
     return (
+        
         <div className="row">
-            <h1 className="text-center">Реєстрація</h1>
+            <h1 ref={titleRef} className="text-center">Реєстрація</h1>
+            {
+                invalid && invalid.length > 0 &&                            /*create div for ERRORS ONLY FROM SERVER*/ /*if errors exists*/
+                <div className="alert alert-danger">
+                    <ul>
+                        {
+                            invalid.map((text, index) => {                 /*How ForEach, mapping errors and write it to list(ul{li})*/
+                                return (
+                                    <li key={index}>{text}</li>
+
+                                );
+                            })
+                        }
+                    </ul>
+                </div>
+            }
             <div className="offset-md-3 col-md-6">
             <Formik /*Використання форміку*/
                 innerRef={formikRef} /*Получаєм силку*/
@@ -69,56 +89,56 @@ const RegisterPage=() => {
                     {/* присвоюєм значення в наш текстовий інпут /common/MyTextInput */}
                     <MyTextInput
                         label = "Електрона пошта"
-                        name = "Email"
+                        name = "email"
                         type = "Email"
-                        id= "Email"
+                        id= "email"
                         placeH = "Введіть електрону пошту"
                     />
 
                     <MyTextInput
                         label = "Номер телефону"
-                        name = "Phone"
+                        name = "phone"
                         type = "Number"
-                        id= "Phone"
+                        id= "phone"
                         placeH = "+38(000)000-00-00"
                     />
                       <MyTextInput
                         label = "FIO"
-                        name = "FIO"
+                        name = "fio"
                         type = "text"
-                        id= "FIO"
+                        id= "fio"
                         placeH = "Write FIO"
                     />
 
                     <MyTextInput
                         label = "Логін"
-                        name = "Login"
+                        name = "login"
                         type = "text"
-                        id= "Login"
+                        id= "login"
                         placeH = "Введіть логін"
                     />
 
                     <MyTextInput
                         label = "Пароль"
-                        name = "Password"
+                        name = "password"
                         type = "password"
-                        id= "Password"
+                        id= "password"
                         placeH = "Введіть пароль"
                     />
 
                     <MyTextInput
                         label = "Повторіть пароль"
-                        name = "ConfirmPassword"
+                        name = "confirmPassword"
                         type = "password"
-                        id= "ConfirmPassword"
+                        id= "confirmPassword"
                         placeH = "Повторіть пароль"
                     />
 
                     {/* /common/MyPhotoInput */}
                     <MyPhotoInput /*Інша функція яка обробляє нашу фотку*/
-                            myField="Photo"
-                            name="Photo"
-                            id="Photo"
+                            myField="photo"
+                            name="photo"
+                            id="photo"
                             formikRef={formikRef} /*Передаєм нашу силку в функцію, яка приймає цей formikRef*/
                         />
                     {/* кнопка відправки форми */}
@@ -131,5 +151,3 @@ const RegisterPage=() => {
 }
 
 export default RegisterPage;
-
-
