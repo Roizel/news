@@ -11,7 +11,7 @@ const MyPhotoInput = ({ myField, formikRef, ...props }) => { /*Приймаєм�
 
     // функція яка викликається при події он чандж на інпуті
     const selectImage = (event) => {
-        const files= event.currentTarget.files; /*ЗАписуєм у files фотку*/
+        const files= event.currentTarget.files; /*Записуєм у files фотку*/
         if (!(files && files[0])) { /*Перевірка на наявність фото*/
             setError("Оберіть файл.");
             return;

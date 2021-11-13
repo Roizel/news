@@ -88,14 +88,6 @@ const RegisterPage = () => {
                             id="email"
                             placeH="Введіть електрону пошту"
                         />
-
-                        <MyTextInput
-                            label="Номер телефону"
-                            name="phone"
-                            type="Number"
-                            id="phone"
-                            placeH="+38(000)000-00-00"
-                        />
                         <MyTextInput
                             label="FIO"
                             name="fio"
@@ -103,15 +95,6 @@ const RegisterPage = () => {
                             id="fio"
                             placeH="Write FIO"
                         />
-
-                        <MyTextInput
-                            label="Логін"
-                            name="login"
-                            type="text"
-                            id="login"
-                            placeH="Введіть логін"
-                        />
-
                         <MyTextInput
                             label="Пароль"
                             name="password"

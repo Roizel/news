@@ -1,40 +1,38 @@
-import { Form } from 'formik';
 import React, { useEffect, useState } from 'react'
-import http from "../../http_common";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { UsersAll, UserDelete } from '../../actions/users';
 
 const HomePage = () => {
-
-    const [users, setUsers] = useState([
-        {
-            fio: "Cинок Маслай",
-            email: "vv@vv.com",
-            image: ""
-        }
-    ])
+    const dispatch = useDispatch();
+    const {list} = useSelector(state => state.users);
+    // const [users, setUsers] = useState([
+    //     {
+    //         fio: "Cинок Маслай",
+    //         email: "vv@vv.com",
+    //         image: ""
+    //     }
+    // ])
 
     useEffect(() => {
-        http.get("api/users/all")
-            .then(resp => {
-                console.log(resp);
-                setUsers(resp.data);
-            });
+        try 
+        {
+            dispatch(UsersAll())
+            .then()
+            .catch()
+        } 
+        catch (error) {
+            console.log("Server error global");
+        }
     }, [])
-    const onEditHandler = (e) => {
-        console.log(e);
-        e.
-        http.post("api/users/edit", e)
-    }
-
-
-    // useEffect(() => {
-    //     const onDeleteHandler = (email) => {
-    //         http.post("api/users/delete", email,)
-    //         .then(resp=>{console.log(resp)})
-    //     }
-    // })
-    const onDeleteHandler = (email) => {
-        http.post("api/users/delete", email,)
-        .then(resp=>{console.log(resp)})
+    const onDeleteClick = (id) => {
+        try {
+          dispatch(UserDelete(id))
+          .then()
+          .catch(); 
+        } catch (error) {
+            
+        }
     }
     return (
         <div className="row">
@@ -42,25 +40,26 @@ const HomePage = () => {
             <table className="table">
                 <thead>
                     <tr>
+                        <th scope="col">ID</th>
                         <th scope="col">ФІО</th>
                         <th scope="col">Email</th>
                         <th scope="col">Image</th>
-                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        users.map((user, index) => {
+                        list.map((user, index) => {
                             return (
                                 <tr key={index}>
+                                    <td>{user.id}</td>
                                     <td>{user.fio}</td>
                                     <td>{user.email}</td>
                                     <td>
                                         <img src={"http://localhost:35635"+user.image} width="150" alt="No Image"></img>
                                     </td>
                                     <td>
-                                        <button type="button" onClick={() => onDeleteHandler(user.email)} className="btn btn-danger">Delete</button>
-                                        <button type="button" onClick={() => onEditHandler(user.email)} className="btn btn-info mx-2">Edit</button>
+                                        <button type="button" onClick={() => onDeleteClick(user.id)} className="btn btn-danger">Delete</button>
+                                        <Link className="btn btn-dark" to={`/user/edit/${user.id}`}>Edit</Link>
                                     </td>
                                 </tr>
 

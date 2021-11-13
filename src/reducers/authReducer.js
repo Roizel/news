@@ -2,7 +2,8 @@ import { LOGIN, LOGOUT, REGISTER } from "../constants/actionTypes";
 
 const initialState = { /*Our state in reducer*/
     isAuth: false,
-    iser: {}
+    isAdmin: false,
+    user: {}
 }
 
 const authReducer = (state = initialState, action) => {
@@ -11,7 +12,7 @@ const authReducer = (state = initialState, action) => {
     switch(type) {
         case REGISTER:{ /*If type == REGISTER*/
             return {
-                isAuth: true
+                isAuth: false
             }
         }
         case LOGIN: {

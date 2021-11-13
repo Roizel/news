@@ -21,7 +21,6 @@ export const LoginUser = (model) => async (dispatch) => {
         //dispatch({type: LOGIN}); /*Call dispatch and send action to redux*/
         const token = result.data.token;
         dispatch(authUser(token));
-        console.log("Loginasdasfasdgfdfg");
         return Promise.resolve(result); /*Return ok*/
     } 
     catch (err) {
