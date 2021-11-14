@@ -6,13 +6,6 @@ import { UsersAll, UserDelete } from '../../actions/users';
 const HomePage = () => {
     const dispatch = useDispatch();
     const {list} = useSelector(state => state.users);
-    // const [users, setUsers] = useState([
-    //     {
-    //         fio: "Cинок Маслай",
-    //         email: "vv@vv.com",
-    //         image: ""
-    //     }
-    // ])
 
     useEffect(() => {
         try 
@@ -25,6 +18,7 @@ const HomePage = () => {
             console.log("Server error global");
         }
     }, [])
+    
     const onDeleteClick = (id) => {
         try {
           dispatch(UserDelete(id))
@@ -55,7 +49,7 @@ const HomePage = () => {
                                     <td>{user.fio}</td>
                                     <td>{user.email}</td>
                                     <td>
-                                        <img src={"http://localhost:35635"+user.image} width="150" alt="No Image"></img>
+                                        <img src={"http://localhost:35635"+user.image+"?t="+new Date().getTime()} alt="Самогон" width="150" />
                                     </td>
                                     <td>
                                         <button type="button" onClick={() => onDeleteClick(user.id)} className="btn btn-danger">Delete</button>

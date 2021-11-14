@@ -31,9 +31,9 @@ export const UserEdit = (id) => async (dispatch) => { /*Method, which send id to
         return Promise.reject(err.response.data); /*return errors*/
     }
 }
-export const UserEditSave = (user, id) => async (dispatch) => { /*Method. which send edit`s data to server and get result*/
+export const UserEditSave = (user) => async (dispatch) => { /*Method. which send edit`s data to server and get result*/
     try {
-        const {data} = await usersService.editsave(user, id); /*Call our func and give data to it*/
+        const {data} = await usersService.save(user); /*Call our func and give data to it*/
         dispatch({type: USERS_EDIT_SAVE, payload: data}); /*Call dispatch and send action to redux*/
         return Promise.resolve(); /*Return ok*/
     } 

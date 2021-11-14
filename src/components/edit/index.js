@@ -6,7 +6,8 @@ import MyPhotoInput from '../common/MyPhotoInput';
 import { useHistory } from 'react-router'; /*For Redirecting*/
 import { useDispatch, useSelector } from 'react-redux'; /*For change variables in redux*/
 import { useParams } from "react-router-dom";
-import { UserEdit, UserEditSave } from '../../actions/users';
+import usersService from '../../services/users.service';
+import EclipseWidget from '../common/eclipse/index'
 
 /*Formik - бібліотека, яка дозволяє повторно використовувати форми + має свої гібкі налаштування*/
 
@@ -23,6 +24,8 @@ const EditPage = () => {
     const formikRef = useRef(); /*Ref for formik*/
     const titleRef = useRef(); /*Ref for errors title(IF ERRORS ONLY FROM SERVER)*/
     const [invalid, setInvalid] = useState([]); /*Ref for Errors from server*/
+    const [imagePath, setImagePath] = useState();
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
     const {id} = useParams(); /*Id яку ми передали в сторінку з кнопкі*/
     const dispatch = useDispatch(); /*For change variables in redux*/
@@ -31,11 +34,9 @@ const EditPage = () => {
     const onSubmitHandler = (values) => {
         const formData = new FormData(); 
         Object.entries(values).forEach(([key, value]) => formData.append(key, value));
-        console.log("Нажалось")
-        dispatch(UserEditSave(formData, id))
-        .then(result => {
-            history.push("/");
-        })
+        console.log(values);
+        usersService.save(formData)
+        .then(res=> history.push("/"))
         .catch(ex => {
             const { errors } = ex;
             Object.entries(errors).forEach(([key, values]) => { /*Create from object massive with key and value(Dictionary from c#) and go with ForEach*/
@@ -49,12 +50,16 @@ const EditPage = () => {
     }
     useEffect(() => {
         try {
-            dispatch(UserEdit(id))
-            .then(good => {
-                console.log("http://localhost:35635"+editedUser.image);
-            })
-            .catch(ex => {
-                console.log(ex.message);
+            usersService.edit(id)
+            .then(res => {
+                const {data} = res;
+                console.log(res.data);
+                formikRef.current.setFieldValue("id", id);
+                formikRef.current.setFieldValue("fio", data.fio);
+                formikRef.current.setFieldValue("email", data.email);
+                setImagePath("http://localhost:35635"+data.image);
+                console.log("http://localhost:35635"+data.image);
+                setLoading(false);
             })
         } 
         catch (error) {
@@ -78,6 +83,7 @@ const EditPage = () => {
                             })
                         }
                     </ul>
+
                 </div>
             }
             <div className="offset-md-3 col-md-6">
@@ -102,16 +108,26 @@ const EditPage = () => {
                             id="fio"
                             placeH = {editedUser.fio}
                         />
-                        <MyPhotoInput
-                            myField="photo"
-                            name="photo"
-                            id="photo"
-                            formikRef={formikRef} /*Передаєм нашу силку в функцію, яка приймає цей formikRef*/
+                        {imagePath &&
+                            <MyPhotoInput
+                                myField="photo"
+                                name="photo"
+                                id="photo"
+                                data={imagePath}
+                                formikRef={formikRef} /*Передаєм нашу силку в функцію, яка приймає цей formikRef*/
+                            />
+                        }
+                           <MyTextInput
+                            name="email"
+                            type="hidden"
+                            id="email"
+                            value={id}
                         />
                         <button type="submit" className="btn btn-dark">Змінити</button>
                     </Form>
                 </Formik>
             </div>
+            {loading && <EclipseWidget/>}
         </div>
     )
 }

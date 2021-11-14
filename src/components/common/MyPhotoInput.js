@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useField } from 'formik';
 
-const MyPhotoInput = ({ myField, formikRef, ...props }) => { /*Приймаємо силку на формік і приймаємо всякі данні(в нашому випадку фото)*/
+const MyPhotoInput = ({ myField, formikRef, data, ...props }) => { /*Приймаємо силку на формік і приймаємо всякі данні(в нашому випадку фото)*/
 
 
     // фото яке показується по замовчувані
-    const [Photo, setPhoto] = useState("https://bytes.ua/wp-content/uploads/2017/08/no-image.png");
+    const [photo, setPhoto] = useState(data ? data : "https://bytes.ua/wp-content/uploads/2017/08/no-image.png");
     const [error, setError] = useState("");
     const [field, meta] = useField(props); /*Присвоюємо в філди і мету пропси*/
 
@@ -35,7 +35,7 @@ const MyPhotoInput = ({ myField, formikRef, ...props }) => { /*Приймаєм�
         <div className="mb-3">
             <label htmlFor={props.name}>
                 <img
-                    src={Photo}
+                    src={photo}
                     width="150"
                 />
             </label>

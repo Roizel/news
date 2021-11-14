@@ -10,8 +10,13 @@ class UsersService { /*Service for send data to server and get it*/
     edit(id) {
         return http.get(`api/users/edit/${id}`);
     }
-    editsave(data, id) {
-        return http.post(`api/users/save/${id}`, data);
+    save(data) {
+        return http.put("api/users/save", data,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
     }
 }
 
